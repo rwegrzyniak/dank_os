@@ -3,10 +3,10 @@
 # $^ = all dependencies
 #
 #
-C_SOURCES = $(wildcard kernel/*.c kernel/drivers/*.c)
-HEADERS = $(wildcard kernel/*.h kernel/drivers/*.h)
+C_SOURCES = $(wildcard kernel/*.c kernel/drivers/*.c kernel/cpu/*.c)
+HEADERS = $(wildcard kernel/*.h kernel/drivers/*.h kernel/cpu/*.h)
 
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o kernel/cpu/interrupt.o}
 
 
 CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
@@ -41,5 +41,5 @@ debug: os.bin kernel.elf
 		nasm $< -f bin -o $@
 
 clean:
-		rm -rf *.bin *.dis *.o os-image.bin *.elf
-		rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o
+		rm -rf *.bin *.dis *.o os-image.bin *.elf cpu/*.o kernel/cpu/*.o
+		rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o kernel/cpu/*.o

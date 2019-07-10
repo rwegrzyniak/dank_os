@@ -20,15 +20,15 @@ typedef struct{
 		u8 flags;
 		u16 h_offset;
 
-} __attribute((packed)) idt_gate_t;
+} __attribute__((packed)) idt_gate_t;
 
 typedef struct {
 		u16 limit;
 		u32 base;
-} __atribute__((packed)) idt_reg_t
+} __attribute__((packed)) idt_reg_t;
 
-idt_gate_t idt[IDT_ENTRIES]
-idt_reg_t idt_reg
+idt_gate_t idt[IDT_ENTRIES];
+idt_reg_t idt_reg;
 
 void set_idt_gate(int nm, u32 handler);
 void set_idt();
