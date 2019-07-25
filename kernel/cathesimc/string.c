@@ -22,6 +22,14 @@ void concate(char* lth, char* rth){
 				lth[++i]=rth[j++];
 		}
 }
+int strlen(char* str){
+		int i=0;
+		while(str[i]!='\0') i++;
+		return i;
+}
+void append(char* lth, char rth){
+		lth[strlen(lth)+1]=rth;
+}
 void rstr(char* str, int len){
 		int i;
 		char tmp;
