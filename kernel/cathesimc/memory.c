@@ -1,6 +1,6 @@
 #include "./memory.h"
 #include "../cpu/types.h"
-
+#include "./def.h"
 u32 free_mem_addr = 0x10000;
 
 
