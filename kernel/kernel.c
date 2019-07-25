@@ -1,5 +1,4 @@
 #include "./drivers/screen.h"
-#include "./cathesim.h"
 #include "./cpu/idt.h"
 #include "./cpu/isr.h"
 #include "./drivers/generic_keyboard.h"

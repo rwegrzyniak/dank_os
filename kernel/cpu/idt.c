@@ -1,5 +1,4 @@
 #include "./idt.h"
-#include "../cathesim.h"
 
 void set_idt_gate(int n, u32 handler){
 		idt[n].l_offset = low_16(handler);

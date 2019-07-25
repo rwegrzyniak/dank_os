@@ -1,8 +1,8 @@
 #include "isr.h"
 #include "idt.h"
 #include "../drivers/screen.h"
-#include "../cathesim.h"
 #include "../drivers/ports.h"
+#include "../cathesimc/memory.h"
 
 
 

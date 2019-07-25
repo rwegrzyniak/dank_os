@@ -1,3 +1,5 @@
+#include "./def.h"
+
 #ifndef SYS_QUEUE_H
 #define SYS_QUEUE_H
 
@@ -24,20 +26,20 @@
 
 
 #define QUEUE_INSERT_HEAD(head, elem, field) do {								\
-		if((elem->field.qel_next = head->qel_first) == NULL)				\
+		if(($(elem)->field.qel_next = $(head)->qel_first) == NULL)				\
 				head->qel_last = &(elem)->field.qel_next;								\
-		head->qel_first = elem;																			\
+		&(head)->qel_first = elem;																			\
 }while(0)
 
 #define QUEUE_INSERT_TAIL(head, elem, field) do {								\
 		elem->field.qel_next = NULL;																\
-		head->qel->last = elem;																			\
-		head->qel_last = &elem->qel_next;														\
+		$(head)->qel->last = elem;																			\
+		$(head)->qel_last = &elem->qel_next;														\
 }while(0)
 
 #define QUEUE_INSERT_AFTER(head, list_elem, elem, field) do { 		\
 		if((elem->field.qel_next = list_elem->field.qel_next)==NULL)	\
-				head->qel_last = &elem->field.qel_next;										\
+				$(head)->qel_last = &(elem)->field.qel_next;										\
 		list_elem->field.qel_next = elem;															\
 }while(0)
 
@@ -67,3 +69,5 @@
 #define QUEUE_FIRST(head) 						(head->qel_first);
 #define QUEUE_NEXT(elem, field) 			(elem->field.qel_next);
 
+
+#endif
