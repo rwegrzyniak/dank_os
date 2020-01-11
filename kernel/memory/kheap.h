@@ -2,7 +2,7 @@
 #define KHEAP_H
 
 #include "../cpu/types.h"
-#include "../cathesimc/def.h"
+#include "../../cathesimc/def.h"
 
 u32 kmalloc_intrnl(size_t size, int align, u32* ph_addr);
 u32 kmalloc_a(size_t size);

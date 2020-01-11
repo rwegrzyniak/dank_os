@@ -2,8 +2,8 @@
 #include "idt.h"
 #include "../drivers/screen.h"
 #include "../drivers/ports.h"
-#include "../cathesimc/memory.h"
-
+#include "../memory/memory.h"
+#include "../../cathesimc/string.h"
 
 
 isr_t interrupt_handlers[256];

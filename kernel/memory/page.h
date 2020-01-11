@@ -16,7 +16,7 @@ typedef struct page{
 
 typedef page_table{
 		page_t pages[1024];
-} page_teble_t;
+} page_table_t;
 
 typedef struct page_directory{
 		page_table_t* table[1024];

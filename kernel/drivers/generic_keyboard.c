@@ -2,10 +2,10 @@
 #include "./generic_keyboard.h"
 #include "../cpu/isr.h"
 #include "../drivers/ports.h"
-#include "../cathesimc/queue.h"
-#include "../cathesimc/string.h"
-#include "../shell/shell.c"
-#include "../cathesimc/function.h"
+#include "../../cathesimc/queue.h"
+#include "../../cathesimc/string.h"
+#include "../../shell/shell.c"
+#include "../../cathesimc/function.h"
 #define BACKSPACE 0x0e
 #define ENTER 0x1c
 

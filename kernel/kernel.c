@@ -2,7 +2,7 @@
 #include "./cpu/idt.h"
 #include "./cpu/isr.h"
 #include "./drivers/generic_keyboard.h"
-#include "./cathesimc/string.h"
+#include "../cathesimc/string.h"
 
 void main() {
 		isr_install();

@@ -1,5 +1,5 @@
 #include "./string.h"
-#include "../cpu/types.h"
+#include "../kernel/cpu/types.h"
 char* itoa(int n, char* str){
 		int i=0;
 		unsigned char sign=0x0;

@@ -1,5 +1,5 @@
 #include "../cpu/types.h"
-#include "../cathesimc/queue.h"
+#include "../../cathesimc/queue.h"
 
 struct key_event{
 		char key;

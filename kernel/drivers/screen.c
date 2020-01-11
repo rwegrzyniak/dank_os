@@ -1,6 +1,6 @@
 #include "./ports.h"
 #include "./screen.h"
-#include "../cathesimc/memory.h"
+#include "../../cathesimc/memory.h"
 
 int get_cursor_offset();
 void set_cursor_offset(int offset);
