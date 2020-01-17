@@ -3,8 +3,8 @@
 # $^ = all dependencies
 #
 #
-C_SOURCES = $(wildcard kernel/*.c kernel/drivers/*.c kernel/cpu/*.c kernel/memory/*.c ./cathesimc/*.c)
-HEADERS = $(wildcard kernel/*.h kernel/drivers/*.h kernel/cpu/*.h kernel/memory/*.h ./cathesimc/*.h)
+C_SOURCES = $(wildcard kernel/*.c kernel/drivers/*.c kernel/cpu/*.c kernel/memory/*.c ./cathesimc/*.c kernel/drivers/ata/*.c)
+HEADERS = $(wildcard kernel/*.h kernel/drivers/*.h kernel/cpu/*.h kernel/memory/*.h ./cathesimc/*.h kernel/drivers/ata/*.h)
 
 OBJ = ${C_SOURCES:.c=.o kernel/cpu/interrupt.o}
 
@@ -28,7 +28,7 @@ run: os.bin
 
 # Open the connection to qemu and load our kernel-object file with symbols
 debug: os.bin kernel.elf
-		qemu-system-x86_64 -s -fda os.bin &
+		qemu-system-x86_64 -fda os.bin -S -s&
 		${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}

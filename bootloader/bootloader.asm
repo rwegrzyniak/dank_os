@@ -27,7 +27,7 @@ KERNEL_OFFSET equ 0x1000
 [bits 16]
 load_kernel:
 		mov bx, KERNEL_OFFSET
-		mov dh, 12
+		mov dh, 32
 		mov dl, [BOOT_DRIVE]
 		call read_from_disk
 		

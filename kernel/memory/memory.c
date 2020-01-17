@@ -1,10 +1,10 @@
 #include "./memory.h"
 #include "../cpu/types.h"
 #include "../../cathesimc/def.h"
-u32 free_mem_addr = 0x10000;
+u32 placement_addr = 0x10000;
 
 
-void mem_cpy(char* src, char* dst, unsigned int bytes){
+void memcpy(char* src, char* dst, unsigned int bytes){
 		int i=0;
 		for (i=0; i< bytes; i++){
 				dst[i] = src[i];
@@ -12,20 +12,20 @@ void mem_cpy(char* src, char* dst, unsigned int bytes){
 		}
 }
 
-void mem_set(u8* dest, u8 val, u32 len){
+void memset(u8* dest, u8 val, u32 len){
 		u8* tmp = (u8*)dest;
-		for(;len != 0; len--) *tmp-- = val;
+		for(;len != 0; len--) *tmp++ = val;
 }
 
 //@TODO poprawic tego biedackiego malloca
 u32 kmalloc_intrnl(size_t size, short int align, u32 *phys_addr){
-		if(align != 0 && (free_mem_addr & 0xFFFFF000)){
-				free_mem_addr &= 0xFFFFF000;
-				free_mem_addr += 0x1000;
+		if(align != 0 && (placement_addr & 0xFFFFF000)){
+				placement_addr &= 0xFFFFF000;
+				placement_addr += 0x1000;
 		}
-		if(phys_addr) *phys_addr = free_mem_addr;
-		u32 ret = free_mem_addr;
-		free_mem_addr += size;
+		if(phys_addr) *phys_addr = placement_addr;
+		u32 ret = placement_addr;
+		placement_addr += size;
 		return ret;
 }
 

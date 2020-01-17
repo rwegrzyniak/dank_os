@@ -1,0 +1,119 @@
+#include "./paging.h"
+#include "../cpu/types.h"
+#include "./memory.h"
+#include "../cpu/isr.h"
+#include "../util/panic.h"
+#include "../drivers/screen.h"
+u32 *frames;
+u32 nframes;
+
+page_dir_t* kernel_dir = 0;
+page_dir_t* cur_dir = 0;
+
+extern u32 placement_addr; //kheap.c
+
+#define INDEX_FROM_BIT(n) (n/8/4)
+#define OFFSET_FROM_BIT(n) (n%(8*4))
+
+static void set_frame(u32 addr){
+		u32 frame = addr/FRAME_SIZE;
+		u32 idx = INDEX_FROM_BIT(frame);
+		u32 offset = OFFSET_FROM_BIT(frame);
+		frames[idx] |= (1 << offset);
+}
+
+static void clear_frame(u32 addr){
+		u32 frame = addr/FRAME_SIZE;
+		u32 idx = INDEX_FROM_BIT(frame);
+		u32 offset = OFFSET_FROM_BIT(frame);
+		frames[idx] &= (0 << offset);
+}
+
+static u32 check_frame(u32 addr){
+		u32 frame = addr/FRAME_SIZE;
+		u32 idx = INDEX_FROM_BIT(frame);
+		u32 offset = OFFSET_FROM_BIT(frame);
+		return frames[idx]&(1 << offset);
+}
+
+static u32 first_free_frame(){
+		u32 i, j; //i-ta ramka + offset j
+		for (i = 0; i < INDEX_FROM_BIT(nframes); i++){
+				if (frames[i]!=0xFFFFFFFF){
+						for (j = 0; i < 32; j++){
+								if (!(frames[i]&(1 << j))) return i*32+j; //jesli j-ty bit bedzie opuszczony to znaczy, ze ramka jest wolna
+						}
+				}
+		}
+		return -1;
+}
+
+void alloc_frame (page_t* page, short int kernel_space, short int writable){
+		if (page->frame != 0) return;
+		u32 frame_idx = first_free_frame();
+		if (frame_idx==-1) PANIC("out of memory");
+		set_frame(frame_idx*FRAME_SIZE); //TODO dodac helper do ustawiania bitsetu tylko z indexu zeby nie mnozyc i dzielic bez potzreby
+		page->present = 1;
+		//warunki są sprawdzane dla pewnosci, z zalozenia mozna by przypisac ale lepiej sprawdzic, zeby nic sie nie pojebalo
+		page->rw = writable? 0:1;
+		page->user_space = kernel_space? 0:1;
+		page->frame = frame_idx;
+}
+
+void free_frame(page_t* page){
+		if(page->frame==0) return;
+		clear_frame(page->frame);
+		page->frame = 0;
+}
+
+void init_paging(){
+		u32 mem_end_page = 0x1000000; //16MB
+		nframes = mem_end_page/FRAME_SIZE;
+		frames = (u32*) kmalloc(INDEX_FROM_BIT(nframes));
+		memset(frames, 0, INDEX_FROM_BIT(nframes)); //wszytskie ramki wolne
+		kernel_dir = (page_dir_t*)kmalloc_a(sizeof(page_dir_t));
+		memset(kernel_dir, 0, PAGE_SIZE);
+		cur_dir = kernel_dir;
+		int i = 0;
+		while (i < placement_addr){
+				alloc_frame( get_page(i, kernel_dir, 1), 0, 0);
+				i += FRAME_SIZE;
+		}
+
+		register_interrupt_handler(14, page_fault);
+
+		switch_page_dir(kernel_dir);
+
+}
+void pp(u32 a){
+		char * tmp;
+		itoa(a, tmp);
+		kprint(tmp);
+		kprint("\n");
+}
+void switch_page_dir(page_dir_t* dir){
+		cur_dir = dir;
+		__asm__ __volatile__("mov %0, %%cr3":: "r"(&dir->tables_physical_addresses));
+		u32 cr0;
+		__asm__ __volatile__("mov %%cr0, %0": "=r"(cr0));
+		cr0 |= 0x80000000;
+		__asm__ __volatile__("mov %0, %%cr0":: "r"(cr0));
+}
+
+page_t* get_page(u32 address, page_dir_t* dir, u8 make){
+		address /= PAGE_SIZE;
+		u32 table_idx = address/1024;
+		if (dir->page_tables[table_idx]) return &dir->page_tables[table_idx]->pages[address%1024];
+		if (make){
+				u32 tmp;
+				dir->page_tables[table_idx] = (page_table_t*)kmalloc_ap(sizeof(page_table_t), &tmp);
+				memset(dir->page_tables[table_idx], 0, FRAME_SIZE);
+				dir->tables_physical_addresses[table_idx] = tmp | 0x7;
+				return &dir->page_tables[table_idx]->pages[address%1024];
+		}
+		return 0;
+}
+
+void page_fault(registers_t regs){
+		PANIC("PAGE FAULT");
+}

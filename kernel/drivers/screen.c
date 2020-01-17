@@ -1,6 +1,6 @@
 #include "./ports.h"
 #include "./screen.h"
-#include "../../cathesimc/memory.h"
+#include "../memory/memory.h"
 
 int get_cursor_offset();
 void set_cursor_offset(int offset);
@@ -28,7 +28,7 @@ void kprint_at(char *str, int col, int row){
 void kprint(char *str){
 		kprint_at(str, -1, -1);
 }
-keprint(char* err){
+void keprint(char* err){
 		int i=0;
 		int offset = get_cursor_offset();
 		int row = get_offset_row(offset);
@@ -76,7 +76,7 @@ int print_char(char c, int col, int row, char attr){
 int  handle_scroll(int  offset) {
 		if (offset  < MAX_ROWS*MAX_COLS *2) {return  offset;}
 		int i;for (i=1; i<MAX_ROWS; i++) {
-				mem_cpy(get_offset(0,i) + VGA_ADDRESS ,
+				memcpy(get_offset(0,i) + VGA_ADDRESS ,
 								get_offset (0,i-1) + VGA_ADDRESS ,
 								MAX_COLS *2);
 		}

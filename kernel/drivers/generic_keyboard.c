@@ -52,13 +52,11 @@ static void keyboard_callback(registers_t regs) {
 }
 
 void init_generic_keyboard(void* keyboard_event_queue, char* simple_key_buff){
-
 		register_interrupt_handler(IRQ1, keyboard_callback); 
 		keyboard_event_queue_ptr = &keyboard_event_qhead;
 		QUEUE_INIT(keyboard_event_queue_ptr);
 		keyboard_event_queue = keyboard_event_queue_ptr;
 		simple_key_buff = keyboard_buffer;
-
 
 
 };
