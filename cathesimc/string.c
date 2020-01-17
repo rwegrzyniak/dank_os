@@ -61,6 +61,7 @@ char* htoa(int n, char* str){
 void printf(char* str, ...){
 		char buffer[256];
 		char conversionBuffer[256];
+		buffer[0] = '\0';
 
 		char* trav;
 		unsigned int i;
