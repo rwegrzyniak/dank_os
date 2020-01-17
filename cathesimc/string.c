@@ -42,21 +42,23 @@ void rstr(char* str){
 		}
 }
 char* htoa(int n, char* str){
-		char* representation = "0123456789ABCDEF";
-		int i=0;
-		unsigned char sign=0x0;
-		if (n < 0) {
-				n = -n;
-				sign = 0x1;
+		str[0] = '0';
+		str[1] = 'x';
+		int nr_zeroes = 2;
+		int zeroes = 1;
+		int i;
+		for (i = 7; i >= 0; i--){
+			str[7-i+nr_zeroes] = (n >> i*4) & 0xf;
+			char* ch;
+
+			if (str[7-i+nr_zeroes] == 0 && 7-i+nr_zeroes == 2){
+				nr_zeroes--;
+				continue;
+			}
+
+			zeroes = 0;
+			str[7-i+nr_zeroes] += (str[7-i+nr_zeroes] < 10 ? '0' : ('A' - 10));
 		}
-		do{
-				str[i++] = representation[n % 16];
-		} while((n/=16)>0);
-		str[i++] = 'x';
-		str[i++] = '0';
-		if (sign!=0x0) str[i++] = '-';
-		str[i] = '\0';
-		rstr(str);
 		return str;
 }
 void printf(char* str, ...){
