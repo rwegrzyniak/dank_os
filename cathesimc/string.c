@@ -42,25 +42,20 @@ void rstr(char* str){
 		}
 }
 char* htoa(int n, char* str){
-		str[0] = '0';
-		str[1] = 'x';
-		str[2] = '\0';
-		char zeros = 0;
-
-		u32 tmp;
-		int i;
-		for (i = 28; i > 0; i -= 4) {
-				tmp = (n >> i) & 0xF;
-				if (tmp == 0 && zeros == 0) continue;
-				zeros = 1;
-				if (tmp > 0xA) append(str, tmp - 0xA + 'a');
-				else append(str, tmp + '0');
+		int i=0;
+		unsigned char sign=0x0;
+		if (n < 0) {
+				n = -n;
+				sign = 0x1;
 		}
-
-		tmp = n & 0xF;
-		if (tmp >= 0xA) append(str, tmp - 0xA + 'a');
-		else append(str, tmp + '0');
-		
+		do{
+				str[i++] = n % 16 + '0';
+		} while((n/=16)>0);
+		str[i++] = 'x';
+		str[i++] = '0';
+		if (sign!=0x0) str[i++] = '-';
+		str[i] = '\0';
+		rstr(str);
 		return str;
 }
 void printf(char* str, ...){
