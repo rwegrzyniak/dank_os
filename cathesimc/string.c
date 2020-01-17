@@ -42,6 +42,7 @@ void rstr(char* str){
 		}
 }
 char* htoa(int n, char* str){
+		char* representation = "0123456789ABCDEF";
 		int i=0;
 		unsigned char sign=0x0;
 		if (n < 0) {
@@ -49,7 +50,7 @@ char* htoa(int n, char* str){
 				sign = 0x1;
 		}
 		do{
-				str[i++] = n % 16 + '0';
+				str[i++] = representation[n % 16];
 		} while((n/=16)>0);
 		str[i++] = 'x';
 		str[i++] = '0';
