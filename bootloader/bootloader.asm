@@ -65,4 +65,4 @@ MSG_KERNEL_LOADING_DONE:
 
 ; bootsector
 times 510-($-$$) db 0
-dw 0xaa55
+dw 0xAA55
