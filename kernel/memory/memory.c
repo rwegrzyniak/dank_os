@@ -1,7 +1,6 @@
 #include "./memory.h"
 #include "../cpu/types.h"
 #include "../../cathesimc/def.h"
-u32 placement_addr = 0x10000;
 
 
 void memcpy(char* src, char* dst, unsigned int bytes){
@@ -19,6 +18,7 @@ void memset(u8* dest, u8 val, u32 len){
 
 //@TODO poprawic tego biedackiego malloca
 u32 kmalloc_intrnl(size_t size, short int align, u32 *phys_addr){
+		static u32 placement_addr=0x10000;
 		if(align != 0 && (placement_addr & 0xFFFFF000)){
 				placement_addr &= 0xFFFFF000;
 				placement_addr += 0x1000;

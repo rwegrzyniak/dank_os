@@ -12,33 +12,39 @@ void pint(u32 a){
 		kprint(tmp);
 		kprint("\n");
 }
+void phex(u32 a){
+		char tmp[256];
+		htoa(a, tmp);
+		kprint(tmp);
+		kprint("\n");
+}
 
 void init_paging(){
 		kernel_dir = kmalloc(sizeof(page_dir_t));
 		memset(kernel_dir, 0, 4096);
 		pint(sizeof(page_dir_t));
+		phex(sizeof(page_dir_t));
 		pint(&kernel_dir->page_tables[0]);
-		pint(kernel_dir);
+		phex(&kernel_dir->page_tables[0]);
 		int i;
 		for(i=0; i<1024; i++){ //setting up page directories for kernel
 				// read and write and kernel_mode and not present
 				kernel_dir->page_tables[i] = (u32)kmalloc(sizeof(page_table_t)) | 0x2;
 		}
+		phex(kernel_dir->page_tables[0]);
+		phex(kernel_dir->page_tables[1023]);
+		kprint("pages\n");
 		map_page_table(kernel_dir->page_tables[0], 1, 1); //map ram to pages;
 		kernel_dir->page_tables[0] |= 0x3; //set as present
-		PANIC("BOZE DOPOMOZ");
+		kprint("lol");
 		enable_paging();
 }
 void map_page_table(page_table_t* p_table, int kernel, int rw){
-		int i;
-		page_t tmp_page;
-		tmp_page.present = 1; 
-		tmp_page.rw = (rw) ? 1 : 0;
-		tmp_page.kernel_space = (kernel) ? 1: 0;
-
+		u32 i;
 		for(i=0; i<1024; i++){
-				tmp_page.frame |= kmalloc(PAGE_SIZE);
-				p_table->pages[i] = tmp_page; 		
+				pint(PAGE_SIZE);
+				p_table->pages[i] = kmalloc(PAGE_SIZE) | 0x3; 
+				phex(p_table->pages[i]);
 		}
 }
 void enable_paging(){
@@ -47,5 +53,5 @@ void enable_paging(){
 		__asm__ ("mov %%cr0, %0": "=r"(cr0_temp_value));
 		cr0_temp_value |= 0x80000000;
 		__asm__ __volatile__("mov %0, %%cr0":: "r"(cr0_temp_value));
-
+		kprint("paging enabled");
 }

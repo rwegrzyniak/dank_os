@@ -15,3 +15,5 @@ log: bochsout.txt
 
 # We don't need mouse emulation
 mouse: enabled=0
+
+cpu: reset_on_triple_fault=1
