@@ -12,7 +12,7 @@ int handle_scroll(int offset);
 
 void kprint_at(char *str, int col, int row){
 		int offset;
-		if (col>=0 && row>=0) get_offset(col, row);
+		if (col>=0 && row>=0) offset = get_offset(col, row);
 		else{
 				offset = get_cursor_offset();
 				row = get_offset_row(offset);
@@ -35,7 +35,7 @@ void keprint(char* err){
 		int col = get_offset_col(offset);
 
 		while(err[i] != 0){
-				offset = print_char(err[i++], col, row, SUPREMACY_TTY_COLOR);
+				offset = print_char(err[i++], col, row, RED_ON_WHITE);
 				row = get_offset_row(offset);
 				col = get_offset_col(offset);
 		}		
@@ -48,13 +48,9 @@ int print_char(char c, int col, int row, char attr){
 		unsigned char* vga_mem=  (unsigned char*) VGA_ADDRESS;
 		if (!attr) attr = SUPREMACY_TTY_COLOR;
 		if (col>= MAX_COLS || row >= MAX_ROWS){
-				//keprint("owiedzmy to wyraznie: te wszystkie (tfu!) sterowniki od VGA calkowicie\
-					//	bezczelnie odmawiaja printowania narzucajac eurokolchozowe normy MAX_ROW\
-						//ri MAX col, podobnie zreszta jak za czasow Htilera");
 				vga_mem[2*(MAX_COLS)*(MAX_ROWS)-2] = 'E';
         vga_mem[2*(MAX_COLS)*(MAX_ROWS)-1] = RED_ON_WHITE;
 				return get_offset(col, row);
-
 		}
 		int offset;
 		if (col>=0 && row>=0) offset = get_offset(col, row);

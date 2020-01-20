@@ -35,13 +35,14 @@ static void keyboard_callback(registers_t regs) {
 		u8 sc = port_byte_in(0x60);
 		if (sc>SC_MAX) return;
 		if(sc == ENTER) {
-				append(keyboard_buffer, '\n');
-				user_input(keyboard_buffer);
-				keyboard_buffer[0] = '\n';
+				//append(keyboard_buffer, '\n');
+				//user_input(keyboard_buffer);
+				//keyboard_buffer[0] = '\n';
+				kprint("\n");
 		}else if(sc == BACKSPACE){
-				append(keyboard_buffer, '<');
-				append(keyboard_buffer, '-');
-				user_input(keyboard_buffer);
+				//append(keyboard_buffer, '<');
+				//append(keyboard_buffer, '-');
+				//user_input(keyboard_buffer);
 		}else{
 				char lit_key[] = {sc_ascii[(int)sc], '\0'};
 				kprint(lit_key);
@@ -53,10 +54,10 @@ static void keyboard_callback(registers_t regs) {
 
 void init_generic_keyboard(void* keyboard_event_queue, char* simple_key_buff){
 		register_interrupt_handler(IRQ1, keyboard_callback); 
-		keyboard_event_queue_ptr = &keyboard_event_qhead;
+		//keyboard_event_queue_ptr = &keyboard_event_qhead;
 		QUEUE_INIT(keyboard_event_queue_ptr);
-		keyboard_event_queue = keyboard_event_queue_ptr;
-		simple_key_buff = keyboard_buffer;
+		//keyboard_event_queue = keyboard_event_queue_ptr;
+		//simple_key_buff = keyboard_buffer;
 
 
 };
