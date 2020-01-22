@@ -24,6 +24,7 @@ void concate(char* lth, char* rth){
 		while(rth[j] != '\0'){
 				lth[++i - 1]=rth[j++];
 		}
+		lth[++i - 1] = '\0';
 }
 int strlen(char* str){
 		int i=0;
@@ -31,7 +32,9 @@ int strlen(char* str){
 		return i;
 }
 void append(char* lth, char rth){
-		lth[strlen(lth)]=rth;
+		int len = strlen(lth);
+		lth[len+1]='\0';
+		lth[len]=rth;
 }
 void rstr(char* str){
 		char *p1, *p2;
@@ -64,6 +67,7 @@ char* htoa(int n, char* str){
 void printf(char* str, ...){
 		char buffer[256];
 		char conversionBuffer[256];
+		char conversionBuffer2[256];
 		buffer[0] = '\0';
 
 		char* trav;
